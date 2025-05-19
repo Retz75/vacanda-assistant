@@ -34,16 +34,19 @@
       speak(directive);
     }
 
-    function startListening() {
-      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-      recognition.lang = "fr-FR";
-      recognition.start();
-      recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById("inputText").value = transcript;
-        sendToVacanda(transcript);
-      };
-    }
+function startListening() {
+  console.log("🎙️ Micro déclenché");
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = "fr-FR";
+  recognition.start();
+
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript;
+    console.log("🎧 Texte reconnu :", transcript);
+    document.getElementById("inputText").value = transcript;
+    sendToVacanda(transcript);
+  };
+}
   </script>
 </body>
 </html>
