@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Vacanda.0 Assistant</title>
+  <script>
+    async function speak(text) {
+      const synth = window.speechSynthesis;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "fr-FR";
+      synth.speak(utter);
+    }
+
+    async function sendToVacanda(prompt) {
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer VOTRE_CLÉ_API_OPENAI"
+        },
+        body: JSON.stringify({
+          model: "gpt-4",
+          messages: [
+            { role: "system", content: "Tu es Vacanda.0, un agent minimaliste qui répond toujours par une seule action claire, sans justification." },
+            { role: "user", content: `Tu es Vacanda.0. Reçois cette commande vocale : ${prompt}` }
+          ]
+        })
+      });
+      const data = await response.json();
+      const directive = data.choices[0].message.content;
+      document.getElementById("response").innerText = directive;
+      speak(directive);
+    }
+
+    function startListening() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = "fr-FR";
+      recognition.start();
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("inputText").value = transcript;
+        sendToVacanda(transcript);
+      };
+    }
+  </script>
+</head>
+<body>
+  <h1>Vacanda.0 – Assistant Vocal</h1>
+  <button onclick="startListening()">Parler à Vacanda</button>
+  <input id="inputText" type="text" placeholder="Votre commande..." readonly>
+  <p><strong>Réponse :</strong></p>
+  <div id="response" style="font-weight: bold;"></div>
+</body>
+</html>
+
