@@ -19,20 +19,20 @@
       synth.speak(utter);
     }
 
-    async function sendToVacanda(prompt) {
-      const response = await fetch("/api/ask", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ prompt })
-      });
+async function sendToVacanda(prompt) {
+  const response = await fetch("/api/ask", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ prompt })
+  });
 
-      const data = await response.json();
-      const directive = data.result;
-      document.getElementById("response").innerText = directive;
-      speak(directive);
-    }
+  const data = await response.json();
+  const directive = data.result;
+  document.getElementById("response").innerText = directive;
+  speak(directive);
+}
 
 function startListening() {
   console.log("🎙️ Micro déclenché");
