@@ -29,7 +29,7 @@ async function sendToVacanda(prompt) {
   });
 
   const data = await response.json();
-  const directive = data.result;
+  const directive = data.result || "Erreur API OpenAI";
   document.getElementById("response").innerText = directive;
   speak(directive);
 }
